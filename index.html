@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Перетаскивание Имён и Ссылок</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;  
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 80%;
+        }
+        .names, .links {
+            width: 80%;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .matching-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            gap: 10px;
+            width: 80%;
+            padding: 12px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .drag-item {
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #dcdcdc;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .drag-item.inactive {
+            background-color: #b0b0b0;
+            cursor: not-allowed;
+        }
+        .empty-cell {
+            border: 1px dashed #ddd;
+            background-color: #f9f9f9;
+            display: flex;
+            height: 30px;
+            justify-content: center;
+            align-items: center;
+        }
+        .matching-cell[data-type="name"] {
+            border: 1px solid #4caf50;
+            height: 30px;
+            background-color: #d1ffd1;
+        }
+        .matching-cell[data-type="link"] {
+            border: 1px solid #ff9800;
+            height: 30px;
+            background-color: #ffe6cc;
+        }
+        .cell-content {
+            padding: 5px;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Медиазапрос для экранов шириной до 768px (для мобильных устройств) */
+        @media (min-width: 768px) {
+            body {
+                height: 100vh;    
+            }
+
+            .container {
+                flex-direction: row; /* Для телефонов элементы будут располагаться горизонтально */
+            }
+
+            .matching-fields {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+                width: 60%;
+            }
+
+            .names, .links {
+                width: 20%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="names">
+            <div class="drag-item" draggable="true" id="des">Des</div>
+            <div class="drag-item" draggable="true" id="kostia">KOSTIA 🐉</div>
+            <div class="drag-item" draggable="true" id="lerana">lerana 🐶</div>
+            <div class="drag-item" draggable="true" id="marlboro">Marlboro 🍺</div>
+            <div class="drag-item" draggable="true" id="tighnari">Tighnari</div>
+            <div class="drag-item" draggable="true" id="xxdangerxx">XxDANGERxX</div>
+            <div class="drag-item" draggable="true" id="coffeeman">Coffeeman</div>
+            <div class="drag-item" draggable="true" id="kesha">kesha 👹</div>
+        </div>
+        <div class="matching-fields">
+            <div class="empty-cell" data-type="name">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="link">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="name">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="link">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="name">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="link">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="name">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="link">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="name">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="link">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="name">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="link">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="name">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="link">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="name">
+                <div class="cell-content"></div>
+            </div>
+            <div class="empty-cell" data-type="link">
+                <div class="cell-content"></div>
+            </div>
+        </div>
+        <div class="links">
+            <div class="drag-item" draggable="true" id="deslink">@des1707</div>
+            <div class="drag-item" draggable="true" id="kostialink">@xxauraxx</div>
+            <div class="drag-item" draggable="true" id="leranalink">@lerana040</div>
+            <div class="drag-item" draggable="true" id="marlborolink">@lee_loefal</div>
+            <div class="drag-item" draggable="true" id="tighnarilink">@svicidesoul</div>
+            <div class="drag-item" draggable="true" id="xxdangerxxlink">@khaadizhat</div>
+            <div class="drag-item" draggable="true" id="coffeemanlink">@chi5ps</div>
+            <div class="drag-item" draggable="true" id="keshalink">@xkesha_da</div>
+        </div>
+    </div>
+
+    <script>
+        // Полный список имен и ссылок
+        const fullList = [
+            { name: "Des", link: "@des1707" },
+            { name: "KOSTIA 🐉", link: "@xxauraxx" },
+            { name: "lerana 🐶", link: "@lerana040" },
+            { name: "Marlboro 🍺", link: "@lee_loefal" },
+            { name: "Tighnari", link: "@svicidesoul" },
+            { name: "XxDANGERxX", link: "@khaadizhat" },
+            { name: "Coffeeman", link: "@chi5ps" },
+            { name: "kesha 👹", link: "@xkesha_da" },
+            { name: "Have", link: "@barsaka" },
+            { name: "Appearance", link: "@laven11as" },
+            { name: "cirrus", link: "@pastaxx" },
+            { name: "CheSh1re", link: "@vladlapenko" },
+            { name: "weeknd 🐅", link: "@m5x30day" },
+            { name: "zMDDemo", link: "@thatisland" },
+            { name: "zHo4b", link: "@zho4b" },
+            { name: "Odertari", link: "@otulissa_popug" },
+            { name: "Dekster", link: "@decster002" },
+            { name: "xXnepcukXx200", link: "@xxnepcukxx_200" },
+            { name: "mazeraty", link: "@maz_zeraty" },
+            { name: "Differ", link: "@abl_97" },
+            { name: "SeenPretty", link: "@seenseeeee" },
+            { name: "virskaya", link: "@wlafiq" },
+            { name: "Shine", link: "@justtheshine" },
+            { name: "G777", link: "@katarinrrr" },
+            { name: "SHOT", link: "@soanrtq" },
+            { name: "xGrandfatherx", link: "@xgrandfatherx" }
+        ];
+    
+        // Функция для случайного перемешивания массива
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1)); // Случайный индекс
+                [array[i], array[j]] = [array[j], array[i]]; // Обмен элементов
+            }
+            return array;
+        }
+
+        // Случайное перемешивание
+        const shuffledList = shuffleArray([...fullList]); // Создаём копию списка и перемешиваем
+        const selecteditems = shuffledList.slice(0, 8); // Берём первые 8 элементов из перемешанного списка
+        
+        // Перемешиваем только ссылки (юзы)
+        const shuffledLinks = shuffleArray(selecteditems.map(item => item.link));
+
+        // Обновляем DOM
+        const namesContainer = document.querySelector(".names");
+        const linksContainer = document.querySelector(".links");
+
+        // Очищаем контейнеры
+        namesContainer.innerHTML = "";
+        linksContainer.innerHTML = "";
+        
+        // Добавляем перемешанные пары
+        selecteditems.forEach((item, index) => {
+            // Создаем элемент для имени
+            const nameDiv = document.createElement("div");
+            nameDiv.className = "drag-item";
+            nameDiv.draggable = true;
+            nameDiv.textContent = item.name;
+            nameDiv.id = item.name.toLowerCase().replace("@", "").toLowerCase();
+            namesContainer.appendChild(nameDiv);
+
+            // Создаем элемент для юза
+            const linkDiv = document.createElement("div");
+            linkDiv.className = "drag-item";
+            linkDiv.draggable = true;
+            linkDiv.textContent = shuffledLinks[index];
+            linkDiv.id = shuffledLinks[index].toLowerCase();
+            linksContainer.appendChild(linkDiv);
+        });
+    
+        // Обновленный функционал перетаскивания
+        const draggableItems = document.querySelectorAll('.drag-item');
+        const emptyCells = document.querySelectorAll('.empty-cell');
+    
+        draggableItems.forEach(item => {
+            item.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text', e.target.id);
+            });
+        });
+
+        emptyCells.forEach(cell => {
+            cell.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+
+            cell.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const draggedItemId = e.dataTransfer.getData('text');
+                const draggedItem = document.getElementById(draggedItemId);
+                const cellContent = cell.querySelector('.cell-content');
+
+                if (!cellContent.textContent) {
+                    if (cell.dataset.type === 'name' && draggedItemId.includes('link')) {
+                        return; // Prevent dropping a link in name field
+                    }
+                    if (cell.dataset.type === 'link' && draggedItemId.includes('name')) {
+                        return; // Prevent dropping a name in link field
+                    }
+
+                    cellContent.textContent = draggedItem.textContent;
+                    cell.classList.add('matching-cell');
+                    draggedItem.setAttribute('draggable', 'false');
+                    draggedItem.classList.add('inactive');
+                }
+            });
+
+             // Очищение ячейки по ПКМ
+            cell.addEventListener('contextmenu', (e) => {
+                e.preventDefault(); // Предотвращает стандартное меню ПКМ
+                const cellContent = cell.querySelector('.cell-content');
+                if (cellContent.textContent) {
+                    // Убираем содержимое ячейки
+                    const draggedItem = Array.from(draggableItems).find(
+                        item => item.textContent === cellContent.textContent
+                    );
+                    if (draggedItem) {
+                        draggedItem.setAttribute('draggable', 'true');
+                        draggedItem.classList.remove('inactive');
+                    }
+                    cellContent.textContent = '';
+                    cell.classList.remove('matching-cell');
+                }
+            });
+        });
+    </script>
+      
+</body>
+</html>
