@@ -21,8 +21,10 @@
             width: 80%;
         }
         .names, .links {
-            width: 80%;
-            padding: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 93%;
+            padding: 7px;
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -33,7 +35,7 @@
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
             gap: 10px;
-            width: 80%;
+            width: 89%;
             padding: 12px;
             background-color: #fff;
             border: 1px solid #ddd;
@@ -41,9 +43,9 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .drag-item {
-            margin: 5px;
-            width: 45%;
-            display: inline-block;
+            margin: 2px;
+            width: auto;
+            display: grid;
             padding: 5px;
             background-color: #dcdcdc;
             border-radius: 5px;
@@ -88,9 +90,9 @@
                 flex-direction: row; /* Для телефонов элементы будут располагаться горизонтально */
             }
 
-            .drag-item {
-                width: auto;
+            .names, .links {
                 display: flex;
+                flex-direction: column;
             }
 
             .matching-fields {
